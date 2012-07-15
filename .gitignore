@@ -2,5 +2,7 @@
 *.swp
 .sass-cache
 .DS_Store*
+.vagrant
 doc_data.txt
 config.py
+Gemfile.lock

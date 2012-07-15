@@ -1,0 +1,6 @@
+*.pyc
+*.swp
+.sass-cache
+.DS_Store*
+doc_data.txt
+config.py

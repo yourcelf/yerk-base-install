@@ -2,6 +2,6 @@
 
 from common import write_conf, run
 
-run("hello")
-run("hello.py")
+script("hello")
+script("hello.py")
 write_conf("hello.conf", "/tmp/hello_there.pardner")

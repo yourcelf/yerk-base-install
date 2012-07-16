@@ -4,18 +4,40 @@
 import os
 import string
 import subprocess
+import sys
 
+LOGGING = False
+LOG_PATH = None
 SCRIPT_BASE = os.path.dirname(__file__)
 
-def run(script_name):
-    subprocess.check_call(os.path.join(SCRIPT_BASE, script_name), shell=True)
+def run(*args):
+    if LOGGING:
+        log_file = open(LOG_PATH, "w")
+    proc = subprocess.Popen(args, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+    while True:
+        data = proc.stdout.readline()
+        if data == '':
+            break
+        sys.stdout.write(data)
+        if LOGGING:
+            log_file.write(data)
+    proc.communicate()
+    if LOGGING:
+        log_file.close
+    return proc.returncode
+
+def sh(commands):
+    return run('/bin/bash', '-c', commands)
+
+def script(script_name):
+    return sh(os.path.join(SCRIPT_BASE, script_name))
 
 class Config(object):
     def __init__(self):
         # Obtain a list of local environment variables parsed from config file.
         var_list = subprocess.check_output(["bash", "-c",
             "source {0} ; (set -o posix ; set) | grep YERK | uniq".format(
-                os.path.join(SCRIPT_BASE, "..", "config")
+                os.path.join(SCRIPT_BASE, "..", "config.py")
             )])
         for line in var_list.splitlines():
             if line.startswith("YERK"):

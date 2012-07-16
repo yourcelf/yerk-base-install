@@ -5,4 +5,5 @@
 .vagrant
 doc_data.txt
 config
+config.py
 Gemfile.lock

@@ -100,6 +100,6 @@ Vagrant::Config.run do |config|
   #
   #   chef.validation_client_name = "ORGNAME-validator"
 
-  config.vm.provision :shell, :inline => "/install/scripts/init_imaginary"
+  config.vm.provision :shell, :inline => "/install/scripts/init_imaginary.py"
 
 end

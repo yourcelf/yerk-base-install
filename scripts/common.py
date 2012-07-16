@@ -16,14 +16,18 @@ def run(*args):
     if LOGGING:
         log_file = open(LOG_PATH, "w")
     proc = subprocess.Popen(args, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+
     while True:
         data = proc.stdout.readline()
         if data == '':
             break
         sys.stdout.write(data)
+        sys.stdout.flush()
         if LOGGING:
             log_file.write(data)
+            log_file.flush()
     proc.communicate()
+
     if LOGGING:
         log_file.close
     return proc.returncode

@@ -2,6 +2,8 @@
 
 from common import *
 
-sh('echo "$YERK_HELLO"')
-script("hello.py")
-write_conf("hello.conf", "/tmp/hello_there.pardner")
+script("system_update.py")
+
+script("install_firewall.py")
+script("configure_firewall_real.py")
+script("finalize_firewall.py")

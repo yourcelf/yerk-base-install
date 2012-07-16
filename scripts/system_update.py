@@ -6,6 +6,7 @@ sh("""
 
 set -e
 set -x
+
 apt-get update && apt-get -y upgrade
 
 """)

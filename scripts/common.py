@@ -12,8 +12,13 @@ def run(script_name):
 
 class Config(object):
     def __init__(self):
-        with open(os.path.join(SCRIPT_BASE, "..", "config")) as fh:
-            for line in fh.readlines():
+        # Obtain a list of local environment variables parsed from config file.
+        var_list = subprocess.check_output(["bash", "-c",
+            "source {0} ; (set -o posix ; set) | grep YERK | uniq".format(
+                os.path.join(SCRIPT_BASE, "..", "config")
+            )])
+        for line in var_list.splitlines():
+            if key.startswith("YERK"):
                 key, _, value = line.strip().partition('=')
                 setattr(self, key, value)
 

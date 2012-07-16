@@ -18,7 +18,7 @@ class Config(object):
                 os.path.join(SCRIPT_BASE, "..", "config")
             )])
         for line in var_list.splitlines():
-            if key.startswith("YERK"):
+            if line.startswith("YERK"):
                 key, _, value = line.strip().partition('=')
                 setattr(self, key, value)
 

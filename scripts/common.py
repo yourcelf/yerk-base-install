@@ -5,6 +5,8 @@ import os
 import string
 import subprocess
 import sys
+sys.path.insert(0, "..")
+import config
 
 LOGGING = False
 LOG_PATH = None
@@ -34,29 +36,22 @@ def sh(command, with_config=True):
 def script(script_name):
     return sh(os.path.join(SCRIPT_BASE, script_name), with_config=False)
 
-class Config(object):
-    def __init__(self):
-        # Obtain a list of local environment variables parsed from config file.
-        var_list = subprocess.check_output(["bash", "-c",
-            "source {0} ; (set -o posix ; set) | grep YERK | uniq".format(
-                os.path.join(SCRIPT_BASE, "..", "config.py")
-            )])
-        for line in var_list.splitlines():
-            if line.startswith("YERK"):
-                key, _, value = line.strip().partition('=')
-                setattr(self, key, value)
-
-config = Config()
+def config_dict():
+    dct = {}
+    for name in dir(config):
+        if not name.startswith("_"):
+            dct[name] = getattr(config, name)
+    return dct
 
 def interpolate(template):
-    return string.Template(template).safe_substitute(config.__dict__)
+    return string.Template(template).safe_substitute(config_dict())
 
 def write_conf(name, destination, owner="root", group="root", perms="0644"):
     with open(os.path.join(SCRIPT_BASE, "..", "conf", name)) as fh:
-        template = string.Template(fh.read())
+        template = fh.read()
 
     with open(destination, 'w') as fh:
-        fh.write(template.safe_substitute(config.__dict__))
+        fh.write(interpolate(template))
 
     subprocess.check_call(["chown", "{0}.{1}".format(owner, group), destination])
     subprocess.check_call(["chmod", perms, destination])

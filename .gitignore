@@ -4,5 +4,5 @@
 .DS_Store*
 .vagrant
 doc_data.txt
-config.py
+config/secrets.py
 Gemfile.lock

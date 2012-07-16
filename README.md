@@ -1,3 +1,5 @@
+**NOTE: requires Python 2.7!**
+
 ## Initial Setup
 
 Install [Ruby](http://www.ruby-lang.org/en/) and make sure you have
@@ -19,9 +21,18 @@ Install [Ruby](http://www.ruby-lang.org/en/) and make sure you have
     # Shutdown
     vagrant halt
 
-## Config variables
+## Configuration
 
-Variables are listed in `config.py`.
+Edit or create your own files in `config`. All variables will be available
+in python scripts under `config` and interpolated in `sh`. For example:
+
+    # config/greeting.py
+    GREETING = "Hello!"
+
+    # scripts/greeting.py
+    from common import *
+    print config.GREETING
+    sh("echo $GREETING")
 
 ## Design Overview
 
@@ -56,10 +67,6 @@ that is generally only run once is the **copy** script.
 Other scripts are often updated and run over and over on the production system.
 An example would be the **configure** script that is run multiple times because
 configuration changes often.
-
-### Use Templating for Configuration
-
-Use a Python string style template system for creating files.
 
 ## To Dos
 

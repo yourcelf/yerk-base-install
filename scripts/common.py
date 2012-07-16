@@ -1,11 +1,12 @@
 #!/usr/bin/env python
-# NOTE: requires python 2.7.
 
 import os
 import string
 import subprocess
 import sys
-sys.path.insert(0, "..")
+import types
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import config
 
 LOGGING = False
@@ -44,14 +45,16 @@ def config_dict():
     dct = {}
     for name in dir(config):
         if not name.startswith("_"):
-            dct[name] = getattr(config, name)
+            value = getattr(config, name)
+            if type(value) != types.ModuleType:
+                dct[name] = value
     return dct
 
 def interpolate(template):
     return string.Template(template).safe_substitute(config_dict())
 
 def write_conf(name, destination, owner="root", group="root", perms="0644"):
-    with open(os.path.join(SCRIPT_BASE, "..", "conf", name)) as fh:
+    with open(os.path.join(SCRIPT_BASE, "..", "templates", name)) as fh:
         template = fh.read()
 
     with open(destination, 'w') as fh:

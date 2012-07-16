@@ -26,11 +26,13 @@ def run(*args):
         log_file.close
     return proc.returncode
 
-def sh(commands):
-    return run('/bin/bash', '-c', commands)
+def sh(command, with_config=True):
+    if with_config:
+        command = interpolate(command)
+    return run('/bin/bash', '-c', command)
 
 def script(script_name):
-    return sh(os.path.join(SCRIPT_BASE, script_name))
+    return sh(os.path.join(SCRIPT_BASE, script_name), with_config=False)
 
 class Config(object):
     def __init__(self):
@@ -45,6 +47,9 @@ class Config(object):
                 setattr(self, key, value)
 
 config = Config()
+
+def interpolate(template):
+    return string.Template(template).safe_substitute(config.__dict__)
 
 def write_conf(name, destination, owner="root", group="root", perms="0644"):
     with open(os.path.join(SCRIPT_BASE, "..", "conf", name)) as fh:

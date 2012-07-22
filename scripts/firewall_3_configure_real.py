@@ -19,8 +19,8 @@ ufw allow proto tcp to any port smtps
 ufw allow proto tcp to any port submission
 ufw allow proto tcp to any port imaps
 ufw allow proto tcp to any port pop3s
-ufw allow proto tcp from 18.85.35.209 to any port nrpe
-ufw allow proto tcp from 18.85.35.209 to any port munin
+ufw allow proto tcp from $YERK_MONITOR_IP_ADDRESS to any port nrpe
+ufw allow proto tcp from $YERK_MONITOR_IP_ADDRESS to any port munin
 
 # Explicit rejects to be nicer to clients
 ufw reject proto tcp to any port imap

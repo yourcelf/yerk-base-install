@@ -4,9 +4,6 @@ from common import *
 
 sh("""
 
-set -e
-set -x
-
 apt-get install postfix dovecot-imapd dovecot-pop3 maildrop libsas12-modules libsas12-modules-sql libmail-spf-query-perl
 
 # TODO: configure postgrey, ala /wiki/HowTo/SetupSpamProtection

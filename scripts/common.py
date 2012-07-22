@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import datetime
 import os
 import string
 import subprocess
@@ -9,37 +10,50 @@ import types
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import config
 
-LOGGING = False
-LOG_PATH = None
 SCRIPT_BASE = os.path.dirname(__file__)
 
-def run(*args):
-    if LOGGING:
-        log_file = open(LOG_PATH, "w")
-    proc = subprocess.Popen(args, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+if config.LOGGING:
+    LOG_PATH = "/tmp/yerk-install-%s.log" % datetime.datetime.now().strftime('%Y%m%d')
+    LOG_FILE = open(LOG_PATH, "a+")
 
+def log(data, append_newline=True):
+    if append_newline:
+        data = data + "\n"
+    sys.stdout.write(data)
+    sys.stdout.flush()
+    if config.LOGGING:
+        LOG_FILE.write(data)
+
+def run(*args):
+    proc = subprocess.Popen(args, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
     while True:
         data = proc.stdout.readline()
         if data == '':
             break
-        sys.stdout.write(data)
-        sys.stdout.flush()
-        if LOGGING:
-            log_file.write(data)
-            log_file.flush()
+        log(data, append_newline=False)
     proc.communicate()
-
-    if LOGGING:
-        log_file.close
     return proc.returncode
 
-def sh(command, with_config=True):
+def sh(command, with_config=True, exit_on_error=True, print_commands=True, require_success=True):
     if with_config:
         command = interpolate(command)
-    return run('/bin/bash', '-c', command)
+    if print_commands:
+        command = "set -x\n" + command
+    if exit_on_error:
+        command = "set -e\n" + command
+    result = run('/bin/bash', '-c', command)
+    if require_success and result != 0:
+        log("Exiting on error %d\n" % result)
+        sys.exit(result)
+    else:
+        return result
 
 def script(script_name):
-    return sh(os.path.join(SCRIPT_BASE, script_name), with_config=False)
+    log("+")
+    log("+ Running script %s" % script_name)
+    log("+")
+    return sh(os.path.join(SCRIPT_BASE, script_name),
+        with_config=False, print_commands=False)
 
 def config_dict():
     dct = {}

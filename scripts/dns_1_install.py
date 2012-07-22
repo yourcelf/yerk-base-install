@@ -2,4 +2,4 @@
 
 from common import *
 
-sh("apt-get install -y ufw")
+sh("apt-get install -y djbdns")

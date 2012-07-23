@@ -12,7 +12,7 @@ Install [Ruby](http://www.ruby-lang.org/en/) and make sure you have
 
 ## Running Virtual Instances
 
-    cd real # or imaginary
+    cd vagrant/real # or vagrant/imaginary
     # Startup
     vagrant up
     # SSH into machine
@@ -23,16 +23,18 @@ Install [Ruby](http://www.ruby-lang.org/en/) and make sure you have
 
 ## Configuration
 
-Edit or create your own files in `config`. All variables will be available
-in python scripts under `config` and interpolated in `sh`. For example:
+Edit or create your own files in the `config` directory. All variables will be
+available python scripts under `config` and interpolated in `sh`. For example:
 
-    # config/greeting.py
-    GREETING = "Hello!"
-
-    # scripts/greeting.py
-    from common import *
-    print config.GREETING
-    sh("echo $GREETING")
+    echo 'GREETING = "Hello"' > config/greeting.py
+    cd scripts && python
+    >>> from common import *
+    >>> print config.GREETING
+    Hello
+    >>> sh("echo $GREETING")
+    + echo Hello
+    Hello
+    0
 
 ## Design Overview
 

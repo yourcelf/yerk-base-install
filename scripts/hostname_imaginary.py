@@ -2,6 +2,6 @@
 
 from common import *
 
-write_conf("imaginary/etc/hosts", "/etc/hosts")
+write_template("/etc/hosts", source_host="imaginary")
 sh("echo imaginary > /etc/hostname")
 sh("hostname imaginary")

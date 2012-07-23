@@ -12,5 +12,10 @@ script("firewall_5_finalize.py")
 
 script("system_update.py")
 
+script("sudoers.py")
+
 script("dns_1_install.py")
+script("dns_2_prepare.py")
 script("dns_3_configure.py")
+
+script("ssl_real.py")

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import datetime
+import grp
+import pwd
 import os
 import string
 import subprocess
@@ -67,12 +69,24 @@ def config_dict():
 def interpolate(template):
     return string.Template(template).safe_substitute(config_dict())
 
-def write_conf(name, destination, owner="root", group="root", perms="0644"):
-    with open(os.path.join(SCRIPT_BASE, "..", "templates", name)) as fh:
+def write_template(destination, source=None, source_host='common',
+                                owner="root", group="root", perms=0644):
+    if source is None:
+        source = "%s%s" % (source_host, destination)
+    log("+")
+    log("+ Writing template %s" % source)
+    log("+               to %s" % destination)
+    log("+               as %s:%s %s" % (owner, group, oct(perms)))
+    log("+")
+
+    with open(os.path.join(SCRIPT_BASE, "..", "templates", source)) as fh:
         template = fh.read()
 
     with open(destination, 'w') as fh:
+        os.chmod(destination, perms)
+        uid = pwd.getpwnam(owner).pw_uid
+        gid = grp.getgrnam(group).gr_gid
+        os.chown(destination, uid, gid)
         fh.write(interpolate(template))
 
-    subprocess.check_call(["chown", "{0}.{1}".format(owner, group), destination])
-    subprocess.check_call(["chmod", perms, destination])
+    return True

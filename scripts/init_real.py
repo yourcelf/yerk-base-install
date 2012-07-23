@@ -2,6 +2,7 @@
 
 from common import *
 
+script("ssh.py")
 script("hostname_real.py")
 script("system_datetime.py")
 

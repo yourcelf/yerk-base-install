@@ -2,4 +2,4 @@
 
 from common import *
 
-write_template("/etc/sudoers.d/yerk", perms="0400")
+write_template("/etc/sudoers.d/yerk", perms="0440")

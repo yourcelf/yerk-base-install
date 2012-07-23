@@ -24,3 +24,5 @@ script("ssl_real.py")
 script("postgres_1_install.py")
 script("postgres_2_configure.py")
 
+script("apache_real_1_install.py")
+script("apache_real_2_configure.py")

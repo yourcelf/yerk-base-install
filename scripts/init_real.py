@@ -19,3 +19,7 @@ script("dns_2_prepare.py")
 script("dns_3_configure.py")
 
 script("ssl_real.py")
+
+script("postgres_1_install.py")
+script("postgres_2_configure.py")
+

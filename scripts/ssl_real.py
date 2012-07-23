@@ -4,7 +4,7 @@ from common import *
 
 write_template("/etc/ssl/certs/positive-ssl-chain.crt")
 write_template("/etc/ssl/certs/mail.yerk.org.crt")
-write_template("/etc/ssl/private/mail.yerk.org.key", perms=0600)
+write_template("/etc/ssl/private/mail.yerk.org.key", perms="0600")
 
 sh("""
 

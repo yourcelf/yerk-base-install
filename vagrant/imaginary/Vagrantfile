@@ -102,4 +102,8 @@ Vagrant::Config.run do |config|
 
   config.vm.provision :shell, :inline => "/yerk-base-install/scripts/init_real.py"
 
+  # Set vbguest.auto_update to false, if do NOT want to check the correct
+  # additions version when booting this machine.
+  config.vbguest.auto_update = false
+
 end

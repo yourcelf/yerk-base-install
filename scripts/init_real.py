@@ -11,7 +11,9 @@ script("firewall_2_prepare.py")
 script("firewall_3_configure_real.py")
 script("firewall_5_finalize.py")
 
+script("vagrant_grub_pc.py")
 script("system_update.py")
+script("unattended_upgrades.py")
 
 script("sudoers.py")
 
